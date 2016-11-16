@@ -1,1 +1,1 @@
-- [x] *Italics* are here.
+- [x] An item with *Italics* is here.

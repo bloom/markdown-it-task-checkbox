@@ -37,6 +37,12 @@ describe('markdown-it-task-lists', function() {
         }
       })
       assert.deepEqual(actual, expected)
+
+      const chillins = actual.children
+      assert.equal(chillins.length, 1)
+      const child = chillins[0]
+      assert.equal(child.type, 'text')
+      assert.equal(child.content, ' An item')
     })
 
     it('identifies a checked box vs unchecked', function() {
@@ -64,5 +70,10 @@ describe('markdown-it-task-lists', function() {
       )
 
       assert.notEqual(undefined, actual)
+    })
+
+    it('doesn\'t include the [x] in the child tokens', function() {
+      const actual = parsed.children[2].children[0]
+      assert(actual.content.indexOf("[x]") == -1)
     })
 });

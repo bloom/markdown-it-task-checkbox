@@ -1,6 +1,8 @@
 // Markdown-it plugin to turn task lists into specific tokens to be consumed
 // by Day One's renderer
 
+const _ = require('ramda')
+
 module.exports = function(md) {
 	var defaults;
 	md.core.ruler.after('inline', 'github-task-lists', function(state) {
@@ -41,7 +43,7 @@ function isTodoItem(tokens, index) {
 	return isInline(tokens[index]) &&
 	       isParagraph(tokens[index - 1]) &&
 	       isListItem(tokens[index - 2]) &&
-	       startsWithTodoMarkdown(tokens[index]);
+	       startsWithTodoMarkdown(tokens[index].content);
 }
 
 function todoify(token, lastId, TokenConstructor) {
@@ -51,7 +53,20 @@ function todoify(token, lastId, TokenConstructor) {
 		idx: lastId,
 		checked: checked
 	}
-	checkbox.children = token.children
+
+	const firstChildSourceLens = _.compose(
+		_.lensIndex(0),
+		_.lensProp('content')
+	)
+	const childrenWithoutCheckboxSyntax = _.over(firstChildSourceLens, maybeContent => {
+		if (maybeContent && startsWithTodoMarkdown(maybeContent)) {
+			return maybeContent.slice(3)
+		} else {
+			return maybeContent
+		}
+	}, token.children)
+
+	checkbox.children = childrenWithoutCheckboxSyntax
 	checkbox.content = token.content.slice(3)
 	return checkbox;
 }
@@ -60,7 +75,7 @@ function isInline(token) { return token.type === 'inline'; }
 function isParagraph(token) { return token.type === 'paragraph_open'; }
 function isListItem(token) { return token.type === 'list_item_open'; }
 
-function startsWithTodoMarkdown(token) {
+function startsWithTodoMarkdown(content) {
 	// leading whitespace in a list item is already trimmed off by markdown-it
-	return token.content.indexOf('[ ] ') === 0 || token.content.indexOf('[x] ') === 0 || token.content.indexOf('[X] ') === 0;
+	return content.indexOf('[ ] ') === 0 || content.indexOf('[x] ') === 0 || content.indexOf('[X] ') === 0;
 }
