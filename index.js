@@ -51,6 +51,7 @@ function todoify(token, lastId, TokenConstructor) {
 		idx: lastId,
 		checked: checked
 	}
+	checkbox.children = token.children
 	checkbox.content = token.content.slice(3)
 	return checkbox;
 }

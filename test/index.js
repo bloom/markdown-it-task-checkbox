@@ -13,6 +13,7 @@ describe('markdown-it-task-lists', function() {
     before(function() {
         var files = {
             basic: 'basic.md',
+            children: 'children.md',
             dirty: 'dirty.md'
         };
 
@@ -43,7 +44,6 @@ describe('markdown-it-task-lists', function() {
 
       const expected = _.merge(actual, {
         type: "checklist_item",
-        content: " An item",
         meta: {
           idx: 1,
           checked: false
@@ -56,4 +56,13 @@ describe('markdown-it-task-lists', function() {
         const tokens = parsed.dirty
         assert.equal(_.find(t => t.type == "checklist_item", tokens), undefined)
     });
+
+    it('nests other tokens as children', function() {
+      const actual = _.find(
+        token => token.type == "em_open",
+        parsed.children[2].children || []
+      )
+
+      assert.notEqual(undefined, actual)
+    })
 });

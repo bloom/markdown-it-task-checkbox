@@ -34,7 +34,7 @@ md.parse('- [x] checked', {}) // =>
 //     map: null,
 //     nesting: 0,
 //     level: 0,
-//     children: null,
+//     children: [... child tokens!],
 //     content: ' checked',
 //     markup: '',
 //     info: '',
