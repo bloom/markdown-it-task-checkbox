@@ -64,14 +64,15 @@ function todoify(token, lastId, options, TokenConstructor) {
 	id = options.idPrefix + lastId
 	token.children.shift();
 	token.children.push(makeCheckbox(token, id, options, TokenConstructor));
-	// lable
-	token.children.push(makeLable(id, TokenConstructor));
+	// label
+	token.children.push(makeLabelOpen(id, TokenConstructor));
 	//text
-	text = new TokenConstructor("text", "", 0);
+	var text = new TokenConstructor("text", "", 0);
 	text.content = token.content.slice(3);
 	token.children.push(text);
 	token.content = '';
-	// token.children.push(new TokenConstructor("label_close", "label", -1));
+	// end label
+	token.children.push(new TokenConstructor("label_close", "label", -1));
 	if (options.divWrap) {
 		token.children.unshift(beginLabel(options, TokenConstructor));
 		token.children.push(endLabel(TokenConstructor));
@@ -88,11 +89,11 @@ function makeCheckbox(token, id, options, TokenConstructor) {
 	if (options.disabled === true) {
 	  checkbox.attrs.push(["disabled", "true"]);
 	}
-	
+
 	return checkbox;
 }
 
-function makeLable(id, TokenConstructor) {
+function makeLabelOpen(id, TokenConstructor) {
 	var label = new TokenConstructor('label_open', 'label', 1);
 	label.attrs = [["for", id]];
 	return label;
