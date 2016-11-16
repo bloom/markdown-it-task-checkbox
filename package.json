@@ -14,12 +14,13 @@
   },
   "repository": {
     "type": "git",
-    "url": "git@github.com:linsir/markdown-it-task-checkbox.git"
+    "url": "git@github.com:bloom/markdown-it-task-checkbox.git"
   },
-  "dependencies": {},
+  "dependencies": {
+    "ramda": "^0.22.1"
+  },
   "devDependencies": {
     "browserify": "*",
-    "cheerio": "^0.20.0",
     "markdown-it": "^7.0.0",
     "mocha": "*",
     "uglify": "*"
@@ -33,10 +34,10 @@
     "todo",
     "checkbox"
   ],
-  "author": "linsir",
+  "author": "Bloom Built",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/linsir/markdown-it-task-checkbox/issues"
+    "url": "https://github.com/bloom/markdown-it-task-checkbox/issues"
   },
-  "homepage": "https://github.com/linsir/markdown-it-task-checkbox#readme"
+  "homepage": "https://github.com/bloom/markdown-it-task-checkbox#readme"
 }

@@ -1,96 +1,56 @@
-# markdown-it-task-lists
+# Bloom Build Markdown Checklists
 
-A [markdown-it](https://www.npmjs.com/package/markdown-it) plugin to create GitHub-style [task lists](https://github.com/blog/1825-task-lists-in-all-markdown-documents)
+A [markdown-it](https://www.npmjs.com/package/markdown-it) plugin to turn GitHub-style [task lists](https://github.com/blog/1825-task-lists-in-all-markdown-documents) into parsable tokens.
 
-Modified from <https://github.com/mcecot/markdown-it-checkbox> and <https://github.com/revin/markdown-it-task-lists>
-
+Modified from <https://github.com/linsir/markdown-it-task-checkbox>
 
 ## Usage
 
-## Install
-
-node.js:
+## Build
 
 ```bash
-npm install markdown-it-task-checkbox --save
+yarn install && yarn build
 ```
+
+The compiled files will be written out to the `dist` folder
 
 ## Use
 
-```js
-var md = require('markdown-it')()
-            .use(require('markdown-it-checkbox'),{
-              disabled: true,
-              divWrap: false,
-              divClass: 'checkbox',
-              idPrefix: 'cbx_',
-              ulClass: 'task-list',
-              liClass: 'task-list-item'
-            });
-
-md.render('- [x] unchecked') // =>
-// <ul class="task-list">
-//  <li class="task-list-item">
-//     <div classname="checkbox">
-//       <input type="checkbox" id="cbx_0" checked="true" disabled="true">
-//       <label for="cbx_0">unchecked</label>
-//     </div>
-//  </li>
-// </ul>
-```
-
-_Differences in browser._ If you load script directly into the page, without
+If you load script directly into the page, without a
 package system, module will add itself globally as `window.markdownitCheckbox`.
 
-## Options
+```js
+var checkboxes = window.markdownitCheckbox // insert your favorite way of importing the module
+var md = require('markdown-it')()
+  .use(require('markdown-it-checkbox'), checkboxes());
 
-
-## disabled
-
-* **Type:** `Boolean`
-* **Default:** `true`
-
-if the value is true, the checkbox can not be selected.
-
-## divWrap
-
-* **Type:** `Boolean`
-* **Default:** `false`
-
-wrap div arround checkbox. this makes it possible to use it for example with [Awesome Bootstrap Checkbox](https://github.com/flatlogic/awesome-bootstrap-checkbox/).
-
-## divClass
-
-* **Type:** `String`
-* **Default:** `checkbox`
-
-classname of div wrapper. will only be used if `divWrap` is enanbled.
-
-## idPrefix
-
-* **Type:** `String`
-* **Default:** `cbx_`
-
-the id of the checkboxs input contains the prefix and an incremental number starting with `0`. i.e. `cbx_1` for the 2nd checkbox.
-
-## ulClass
-
-* **Type:** `String`
-* **Default:** `task-list`
-
-classname of ul wrapper.
-
-## liClass
-
-* **Type:** `String`
-* **Default:** `task-list-item`
-
-classname of li wrapper.
+md.parse('- [x] checked', {}) // =>
+// [
+//   ...,
+//   {
+//     type: 'checklist_item',
+//     tag: 'div',
+//     attrs: null,
+//     map: null,
+//     nesting: 0,
+//     level: 0,
+//     children: null,
+//     content: ' checked',
+//     markup: '',
+//     info: '',
+//     meta: {
+//       idx: 0, // <- The global index of the checkbox
+//       checked: true // <- The checked state
+//     },
+//     block: false,
+//     hidden: false
+//   },
+//   ...
+// ]
+```
 
 ## THANKS
 
-<https://github.com/mcecot/markdown-it-checkbox> and <https://github.com/revin/markdown-it-task-lists>
-
-## License
-
-MIT License © 2016 Linsir
+- <https://github.com/mcecot/markdown-it-checkbox>
+- <https://github.com/revin/markdown-it-task-lists>
+- <https://github.com/linsir/markdown-it-task-checkbox>
