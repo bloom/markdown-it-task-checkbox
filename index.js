@@ -58,7 +58,7 @@ function todoify(token, lastId, TokenConstructor) {
 		_.lensIndex(0),
 		_.lensProp('content')
 	)
-	const childrenWithoutCheckboxSyntax = _.over(firstChildSourceLens, maybeContent => {
+	const childrenWithoutCheckboxSyntax = _.over(firstChildSourceLens, function(maybeContent) {
 		if (maybeContent && startsWithTodoMarkdown(maybeContent)) {
 			return maybeContent.slice(3)
 		} else {

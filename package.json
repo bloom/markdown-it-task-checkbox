@@ -10,20 +10,23 @@
     "build-dist": "npm run build-dist-copyright && npm run build-dist-file && npm run build-dist-min",
     "build-dist-copyright": "echo /*! ${npm_package_name} ${npm_package_version} ${npm_package_homepage} by ${npm_package_author} @license ${npm_package_license} \\*/ > dist/${npm_package_name}.js",
     "build-dist-file": "browserify ${npm_package_main} -s markdownitTaskLists >> dist/${npm_package_name}.js",
-    "build-dist-min": "uglifyjs dist/${npm_package_name}.js -b beautify=false,ascii-only=true -c -m --preamble \"/*! ${npm_package_name} ${npm_package_version} ${npm_package_homepage} by ${npm_package_author} @license {$npm_package_license} */\" > dist/${npm_package_name}.min.js"
+    "build-dist-min": "uglifyjs dist/${npm_package_name}.js --compress --mangle --preamble \"/*! ${npm_package_name} ${npm_package_version} $(echo $(cat ./LICENSE)) */\" > dist/${npm_package_name}.min.js"
   },
   "repository": {
     "type": "git",
     "url": "git@github.com:bloom/markdown-it-task-checkbox.git"
   },
   "dependencies": {
-    "ramda": "^0.22.1"
+    "lodash.find": "^4.6.0",
+    "lodash.merge": "^4.6.0",
+    "lodash.update": "^4.10.2",
+    "ramda": "^0.22.1",
+    "uglify-js": "^2.7.4"
   },
   "devDependencies": {
     "browserify": "*",
     "markdown-it": "^7.0.0",
-    "mocha": "*",
-    "uglify": "*"
+    "mocha": "*"
   },
   "keywords": [
     "markdown",
@@ -35,7 +38,7 @@
     "checkbox"
   ],
   "author": "Bloom Built",
-  "license": "ISC",
+  "license": "LicenseRef-LICENSE",
   "bugs": {
     "url": "https://github.com/bloom/markdown-it-task-checkbox/issues"
   },
