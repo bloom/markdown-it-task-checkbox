@@ -12,7 +12,7 @@ function installRemarkableTaskListPlugin(remarkableObj) {
     var lastId = 0;
     for (var i = 2; i < tokens.length; i++) {
       if (isTodoItem(tokens, i)) {
-        // Modify the checlist_item, adding a hasCheckbox property.
+        // Modify the checklist_item token, adding a hasCheckbox property.
         tokens[i-2].hasCheckbox = true;
 
         // Modify the 'inline' token in-place to add the checkbox metadata and remove "- [ ] " part at start.
