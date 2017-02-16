@@ -7,25 +7,16 @@ var compose = require('ramda/src/compose')
 var over = require('ramda/src/over')
 
 function installRemarkableTaskListPlugin(remarkableObj) {
-  var defaults;
   remarkableObj.core.ruler.after('inline', 'github-task-lists', function(state) {
     var tokens = state.tokens;
     var lastId = 0;
     for (var i = 2; i < tokens.length; i++) {
-
       if (isTodoItem(tokens, i)) {
-        // Remove the paragraph_open token before the todo token
-        //tokens.splice(i - 1, 1);
-        //i--;
-
         // Modify the checlist_item, adding a hasCheckbox property.
         tokens[i-2].hasCheckbox = true;
 
         // Modify the 'inline' token in-place to add the checkbox metadata and remove "- [ ] " part at start.
         tokens[i] = todoify(tokens[i], lastId);
-
-        // Remove the paragraph_close token after the todo token
-        //tokens.splice(i + 1, 1);
 
         lastId += 1;
       }
