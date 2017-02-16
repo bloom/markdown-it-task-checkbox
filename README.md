@@ -1,6 +1,6 @@
-# Bloom Build Markdown Checklists
+# Bloom Built Markdown Checklists for Remarkable
 
-A [markdown-it](https://www.npmjs.com/package/markdown-it) plugin to turn GitHub-style [task lists](https://github.com/blog/1825-task-lists-in-all-markdown-documents) into parsable tokens.
+A [remarkable](https://github.com/jonschlinkert/remarkable) plugin to turn GitHub-style [task lists](https://github.com/blog/1825-task-lists-in-all-markdown-documents) into parsable tokens.
 
 Modified from <https://github.com/linsir/markdown-it-task-checkbox>
 
@@ -16,28 +16,25 @@ The compiled files will be written out to the `dist` folder
 
 ## Use
 
-If you load script directly into the page, without a
-package system, module will add itself globally as `window.markdownitCheckbox`.
+Install method will add itself globally into var `installRemarkableChecklistPluginGlobalFunc` [works around a problem where we use this].
+
+Right now the .min.js file is having an issue exposing the function globally, so use the non-min file for now.
 
 ```js
-var checkboxes = window.markdownitCheckbox // insert your favorite way of importing the module
-var md = require('markdown-it')()
-  .use(require('markdown-it-checkbox'), checkboxes());
+var md = Remarkable(...)
+var installRemarkableChecklistPluginGlobalFunc = undefined;
+// ...Load script remarkable-task-checkbox.js...
+installRemarkableChecklistPluginGlobalFunc(md)
 
 md.parse('- [x] checked', {}) // =>
 // [
 //   ...,
 //   {
-//     type: 'checklist_item',
-//     tag: 'div',
-//     attrs: null,
-//     map: null,
-//     nesting: 0,
-//     level: 0,
+//     type: 'inline',
+//     checkboxMeta: {idx: 0, checked: false, isCheckbox: true},
+//     level: 3,
 //     children: [... child tokens!],
-//     content: ' checked',
-//     markup: '',
-//     info: '',
+//     content: 'checked',
 //     meta: {
 //       idx: 0, // <- The global index of the checkbox
 //       checked: true // <- The checked state

@@ -6,41 +6,35 @@ var lensProp = require('ramda/src/lensProp')
 var compose = require('ramda/src/compose')
 var over = require('ramda/src/over')
 
-module.exports = function(md) {
+function installRemarkableTaskListPlugin(remarkableObj) {
   var defaults;
-  md.core.ruler.after('inline', 'github-task-lists', function(state) {
+  remarkableObj.core.ruler.after('inline', 'github-task-lists', function(state) {
     var tokens = state.tokens;
     var lastId = 0;
     for (var i = 2; i < tokens.length; i++) {
 
       if (isTodoItem(tokens, i)) {
         // Remove the paragraph_open token before the todo token
-        tokens.splice(i - 1, 1)
-        i--
-        // ---
-        // Modify the 'inline' token in-place to be a checklist_item token instead
-        tokens[i] = todoify(tokens[i], lastId, state.Token);
-        // ---
+        //tokens.splice(i - 1, 1);
+        //i--;
+
+        // Modify the checlist_item, adding a hasCheckbox property.
+        tokens[i-2].hasCheckbox = true;
+
+        // Modify the 'inline' token in-place to add the checkbox metadata and remove "- [ ] " part at start.
+        tokens[i] = todoify(tokens[i], lastId);
+
         // Remove the paragraph_close token after the todo token
-        tokens.splice(i + 1, 1)
-        // ---
+        //tokens.splice(i + 1, 1);
+
         lastId += 1;
-        attrSet(tokens[i - 1], 'class', 'task-list-item');
       }
     }
   });
 };
 
-function attrSet(token, name, value) {
-  var index = token.attrIndex(name);
-  var attr = [name, value];
-
-  if (index < 0) {
-    token.attrPush(attr);
-  } else {
-    token.attrs[index] = attr;
-  }
-}
+// Expose method to outside world.
+installRemarkableChecklistPluginGlobalFunc = installRemarkableTaskListPlugin;
 
 function isTodoItem(tokens, index) {
   return isInline(tokens[index]) &&
@@ -50,11 +44,21 @@ function isTodoItem(tokens, index) {
 }
 
 function todoify(token, lastId, TokenConstructor) {
-  var checkbox = new TokenConstructor('checklist_item', 'div', 0);
+
+  var checkbox = token;
+
+    //     type: 'checklist_item',
+    //     content: "",
+    //     level: token.level - 1,
+    //     lines: token.lines,
+    //     children: []
+    // }
+
   var checked = (token.content.indexOf('[x] ') === 0 || token.content.indexOf('[X] ') === 0)
-  checkbox.meta = {
+  checkbox.checkboxMeta = {
     idx: lastId,
-    checked: checked
+    checked: checked,
+    isCheckbox: true
   }
 
   var firstChildSourceLens = compose(
@@ -63,14 +67,14 @@ function todoify(token, lastId, TokenConstructor) {
   )
   var childrenWithoutCheckboxSyntax = over(firstChildSourceLens, function(maybeContent) {
     if (maybeContent && startsWithTodoMarkdown(maybeContent)) {
-      return maybeContent.slice(3)
+      return maybeContent.slice(4)
     } else {
       return maybeContent
     }
   }, token.children)
 
   checkbox.children = childrenWithoutCheckboxSyntax
-  checkbox.content = token.content.slice(3)
+  checkbox.content = token.content.slice(4)
   return checkbox;
 }
 
