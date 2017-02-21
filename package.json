@@ -1,7 +1,7 @@
 {
-  "name": "markdown-it-task-checkbox",
-  "version": "1.0.0",
-  "description": "A markdown-it plugin to create GitHub-style task lists",
+  "name": "remarkable-task-checkbox",
+  "version": "1.0.1",
+  "description": "A remarkable plugin to create GitHub-style task lists",
   "main": "index.js",
   "scripts": {
     "test": "mocha --timeout 5000",
@@ -10,7 +10,7 @@
     "build-dist": "npm run build-dist-copyright && npm run build-dist-file && npm run build-dist-min",
     "build-dist-copyright": "echo /*! ${npm_package_name} ${npm_package_version} ${npm_package_homepage} by ${npm_package_author} @license ${npm_package_license} \\*/ > dist/${npm_package_name}.js",
     "build-dist-file": "browserify ${npm_package_main} -s markdownitTaskLists >> dist/${npm_package_name}.js",
-    "build-dist-min": "uglifyjs dist/${npm_package_name}.js --compress --mangle --preamble \"/*! ${npm_package_name} ${npm_package_version} $(echo $(cat ./LICENSE)) */\" > dist/${npm_package_name}.min.js"
+    "build-dist-min": "uglifyjs dist/${npm_package_name}.js  --reserved installRemarkableGlobalFunc  --compress --mangle --preamble \"/*! ${npm_package_name} ${npm_package_version} $(echo $(cat ./LICENSE)) */\" > dist/${npm_package_name}.min.js"
   },
   "repository": {
     "type": "git",
@@ -30,8 +30,8 @@
   },
   "keywords": [
     "markdown",
-    "markdown-it",
-    "markdown-it-plugin",
+    "remarkable",
+    "remarkable-plugin",
     "task",
     "list",
     "todo",
