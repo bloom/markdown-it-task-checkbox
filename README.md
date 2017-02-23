@@ -30,15 +30,12 @@ md.parse('- [x] checked', {}) // =>
 // [
 //   ...,
 //   {
-//     type: 'inline',
-//     checkboxMeta: {idx: 0, checked: false, isCheckbox: true},
-//     level: 3,
+//     type: 'list_item_open',
+//     checkboxMeta: {idx: 0, checked: true, isCheckbox: true},
+//     level: 1,
 //     children: [... child tokens!],
 //     content: 'checked',
-//     meta: {
-//       idx: 0, // <- The global index of the checkbox
-//       checked: true // <- The checked state
-//     },
+//     hasCheckbox: true,
 //     block: false,
 //     hidden: false
 //   },
