@@ -12,11 +12,12 @@ function installRemarkableTaskListPlugin(remarkableObj) {
     var lastId = 0;
     for (var i = 2; i < tokens.length; i++) {
       if (isTodoItem(tokens, i)) {
-        // Modify the checklist_item token, adding a hasCheckbox property.
-        tokens[i-2].hasCheckbox = true;
-
         // Modify the 'inline' token in-place to add the checkbox metadata and remove "- [ ] " part at start.
         tokens[i] = todoify(tokens[i], lastId);
+
+        // Modify the list_item_open token, adding a hasCheckbox property + the metadata.
+        tokens[i-2].hasCheckbox = true;
+        tokens[i-2].checkboxMeta =  tokens[i].checkboxMeta
 
         lastId += 1;
       }
@@ -34,16 +35,9 @@ function isTodoItem(tokens, index) {
     startsWithTodoMarkdown(tokens[index].content);
 }
 
-function todoify(token, lastId, TokenConstructor) {
+function todoify(token, lastId) {
 
   var checkbox = token;
-
-    //     type: 'checklist_item',
-    //     content: "",
-    //     level: token.level - 1,
-    //     lines: token.lines,
-    //     children: []
-    // }
 
   var checked = (token.content.indexOf('[x] ') === 0 || token.content.indexOf('[X] ') === 0)
   checkbox.checkboxMeta = {
